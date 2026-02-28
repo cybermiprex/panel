@@ -1,3 +1,148 @@
-<h1>Bakımdayız</h1><hr>
-<p>Şuan bakımdayız sonra gelin</p>
-<p>light x miprex</p>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM BY MIPREX | GİRİŞ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --neon: hsla(214, 100%, 51%, 1);
+            --dark: #050505;
+            --card-bg: rgba(13, 13, 13, 0.9);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Fira Code', monospace; }
+        body { background: var(--dark); color: white; overflow: hidden; height: 100vh; }
+
+        /* --- VİDEO ARKA PLAN --- */
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(0.4) contrast(1.2);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 0;
+        }
+
+        /* --- SADECE GİRİŞ EKRANI --- */
+        #auth-screen {
+            position: fixed; inset: 0; 
+            display: flex; align-items: center; justify-content: center; z-index: 9999;
+        }
+
+        .auth-container { width: 100%; max-width: 420px; text-align: center; padding: 20px; position: relative; z-index: 10; }
+        .auth-header h1 { font-size: 1.8rem; letter-spacing: 5px; margin-bottom: 10px; text-shadow: 0 0 15px var(--neon); }
+        
+        .social-row { display: flex; justify-content: center; gap: 50px; margin: 30px 0; }
+        .tg-box { text-align: center; text-decoration: none; color: inherit; }
+        .tg-icon { 
+            width: 50px; height: 50px; background: #0088cc; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; margin-bottom: 8px;
+            box-shadow: 0 0 15px rgba(0, 136, 204, 0.5);
+            transition: 0.3s;
+        }
+        .tg-icon:hover { transform: scale(1.1); box-shadow: 0 0 25px var(--neon); }
+        .tg-user { font-size: 0.75rem; color: #888; }
+
+        .auth-card { 
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; 
+            padding: 30px; box-shadow: 0 0 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+        }
+        
+        #key-input { 
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333; color: var(--neon); 
+            padding: 15px; border-radius: 8px; outline: none; text-align: center; 
+            font-size: 1rem; margin-bottom: 15px; transition: 0.3s;
+        }
+        #key-input:focus { border-color: var(--neon); box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
+
+        .btn-access { 
+            width: 100%; padding: 15px; background: #151515; color: white; border: 1px solid #333; 
+            border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .btn-access:hover { border-color: var(--neon); color: var(--neon); background: rgba(0, 242, 255, 0.05); }
+
+        #error-msg { color: #ff3e3e; margin-top: 15px; font-size: 0.8rem; display: none; }
+    </style>
+</head>
+<body>
+
+    <video id="video-bg" loop playsinline muted autoplay>
+        <source src="baba.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <div id="auth-screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>SYSTEM BY MIPREX</h1>
+                <p style="color: #888; font-size: 0.7rem;">S7RGU P4N3Lİ</p>
+                <div style="margin: 20px 0; border: 1px solid var(--neon); display: inline-block; padding: 5px 20px; border-radius: 4px; color: var(--neon);">
+                    MIPREX ✖ LIGHT
+                </div>
+            </div>
+
+            <div class="social-row">
+                <a href="https://t.me/lord1xm" class="tg-box">
+                    <div class="tg-icon"><i data-lucide="send"></i></div>
+                    <span class="tg-user">@lord1xm</span>
+                </a>
+                <a href="https://t.me/L7ghtv4p" class="tg-box">
+                    <div class="tg-icon"><i data-lucide="send"></i></div>
+                    <span class="tg-user">@L7ghtv4p</span>
+                </a>
+            </div>
+
+            <div class="auth-card">
+                <input type="password" id="key-input" placeholder="ANAHTAR GİRİNİZ">
+                <button class="btn-access" onclick="verify()">ERİŞİMİ ONAYLA</button>
+                <div id="error-msg">Geçersiz anahtar! Lütfen yetkili ile görüşün.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function verify() {
+            const input = document.getElementById('key-input').value;
+            const error = document.getElementById('error-msg');
+            
+            // Eğer giriş yapıldığında bir yere gitmesini istiyorsan 
+            // buraya yönlendirme ekleyebilirsin. Şu an sadece hata verir.
+            if(input === "") {
+                error.innerText = "Lütfen bir anahtar girin!";
+                error.style.display = "block";
+            } else {
+                error.innerText = "ERİŞİM REDDEDİLDİ: " + input.toUpperCase();
+                error.style.display = "block";
+            }
+        }
+
+        document.getElementById('key-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verify();
+        });
+
+        // Sayfaya tıklandığında videonun sesini açmaya çalışır (Tarayıcı politikası gereği)
+        document.body.addEventListener('click', () => {
+            const v = document.getElementById('video-bg');
+            v.muted = false;
+        }, { once: true });
+    </script>
+</body>
+</html>
